@@ -1,0 +1,4 @@
+node_modules
+dist
+gotlem_report.html
+*.log
