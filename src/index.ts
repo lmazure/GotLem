@@ -6,8 +6,13 @@ import path from 'path';
 import { generateReport, saveReport } from './report.js';
 
 async function main() {
-    const configPath = process.argv[2] || 'config.sample.yaml';
-    const reportPath = 'gotlem_report.html';
+    const configPath = process.argv[2];
+    const reportPath = process.argv[3];
+
+    if (!configPath || !reportPath) {
+        console.error('Usage: gotlem <configPath> <reportPath>');
+        process.exit(1);
+    }
 
     try {
         console.log('--- GotLem Analysis Starting ---');
