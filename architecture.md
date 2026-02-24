@@ -11,7 +11,8 @@ Uses [js-yaml](https://github.com/nodeca/js-yaml) to parse and validate the user
 A REST-based client using [axios](https://axios-http.com/) that handles communication with GitLab.
 - **Pagination**: Automatically handles GitLab's cursor-based pagination for large projects/groups.
 - **Scope**: Fetches issues from projects and epics from groups.
-- **Milestones**: Resolves active milestones at both project and group levels.
+- **Recursion**: For groups, it recursively fetches all descendant epics and all issues from subgroups/contained projects.
+- **Milestones**: Resolves active milestones at both project and group levels. It efficiently handles and caches milestones for projects discovered during recursive group searches.
 
 ### 3. Rule Engine (`src/rules.ts`)
 The core logic of the tool, built on top of [Handlebars](https://handlebarsjs.com/).

@@ -4,7 +4,7 @@ GotLem is a tool designed to identify and correct issues and epics in GitLab tha
 
 ## Workflow
 
-1. **Analyze**: The tool fetches issues and epics from specified groups and projects.
+1. **Analyze**: The tool fetches issues and epics from specified groups (including all subgroups/descendants) and projects.
 2. **Evaluate**: Each item is checked against a set of rules defined in a YAML file.
 3. **Report**: An interactive HTML report is generated listing all proposed corrections.
 4. **Review & Execute**: You review the report in your browser, provide a Personal Access Token (PAT), and post comments directly to GitLab with one click.
