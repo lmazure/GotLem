@@ -48,4 +48,9 @@ export class GitLabClient {
         const encodedPath = encodeURIComponent(projectPath);
         return this.fetchPaginated<GitLabMilestone>(`/projects/${encodedPath}/milestones`, { state: 'active' });
     }
+
+    async getGroupMilestones(groupPath: string): Promise<GitLabMilestone[]> {
+        const encodedPath = encodeURIComponent(groupPath);
+        return this.fetchPaginated<GitLabMilestone>(`/groups/${encodedPath}/milestones`, { state: 'active' });
+    }
 }

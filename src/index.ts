@@ -42,9 +42,11 @@ async function main() {
                 console.log(`Analyzing group: ${groupPath}...`);
                 try {
                     const epics = await client.getGroupEpics(groupPath);
+                    const milestones = await client.getGroupMilestones(groupPath);
+
                     for (const epic of epics) {
                         for (const rule of config.rules) {
-                            const res = engine.evaluate(epic, rule, [], config.comment_prefix, config.comment_suffix);
+                            const res = engine.evaluate(epic, rule, milestones, config.comment_prefix, config.comment_suffix);
                             if (res) results.push(res);
                         }
                     }
