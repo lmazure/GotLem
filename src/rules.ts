@@ -18,8 +18,7 @@ export class RuleEngine {
             if (item.type === 'ISSUE') {
                 return !item.milestone;
             }
-            // Epics don't have milestones in the same way in GitLab REST API V4 usually
-            return true;
+            throw new Error('hasNoMilestone helper is only supported for Issues, not Epics.');
         });
 
         Handlebars.registerHelper('hasLabel', function (this: any, label: string) {
@@ -71,16 +70,15 @@ export class RuleEngine {
                 };
             }
         } catch (error) {
-            console.warn(`Error evaluating rule "${rule.name}" version ${rule.version} for ${item.type} ${item.iid}:`, error instanceof Error ? error.message : error);
-            // We report the error in the final report as well if possible, or just skip?
-            // The spec says "if there is zero or more than one open milestone, an error should be reported for the application of the rule to the issue"
-            if (error instanceof Error && (error.message.includes('milestone'))) {
-                return {
-                    rule,
-                    item,
-                    proposedComment: `Error: ${error.message}`
-                };
-            }
+            const errorMessage = error instanceof Error ? error.message : String(error);
+            console.warn(`Error evaluating rule "${rule.name}" version ${rule.version} for ${item.type} ${item.iid}:`, errorMessage);
+
+            // We report the error in the final report
+            return {
+                rule,
+                item,
+                proposedComment: `Error: ${errorMessage}`
+            };
         }
 
         return null;

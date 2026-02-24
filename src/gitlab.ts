@@ -5,6 +5,9 @@ export class GitLabClient {
     private client: AxiosInstance;
 
     constructor(private baseUrl: string, private pat?: string) {
+        if (!baseUrl) {
+            throw new Error('GitLab Base URL is required');
+        }
         this.client = axios.create({
             baseURL: `${baseUrl.replace(/\/$/, '')}/api/v4`,
             headers: pat ? { 'PRIVATE-TOKEN': pat } : {},

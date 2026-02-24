@@ -106,4 +106,26 @@ describe('RuleEngine', () => {
         assert.ok(result);
         assert.match(result.proposedComment, /^Error: Multiple open milestones found/);
     });
+
+    test('should error if hasNoMilestone is called on an Epic', () => {
+        const mockEpic: GitLabEpic = {
+            id: 2,
+            iid: 201,
+            title: 'Big Epic',
+            description: 'Main epic',
+            labels: [],
+            web_url: 'https://gitlab.com/epic/201',
+            group_id: 1,
+            type: 'EPIC'
+        };
+        const rule: Rule = {
+            name: 'No Milestone',
+            version: 1,
+            perimeter: '{{#if (hasNoMilestone)}}true{{/if}}',
+            comment: 'No milestone found'
+        };
+        const result = engine.evaluate(mockEpic, rule, [], '', '');
+        assert.ok(result);
+        assert.strictEqual(result.proposedComment, 'Error: hasNoMilestone helper is only supported for Issues, not Epics.');
+    });
 });
