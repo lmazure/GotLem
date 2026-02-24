@@ -40,12 +40,24 @@ export class GitLabClient {
 
     async getGroupEpics(groupPath: string): Promise<GitLabEpic[]> {
         const encodedPath = encodeURIComponent(groupPath);
-        const epics = await this.fetchPaginated<GitLabEpic>(`/groups/${encodedPath}/epics`, { state: 'opened' });
+        const epics = await this.fetchPaginated<GitLabEpic>(`/groups/${encodedPath}/epics`, {
+            state: 'opened',
+            include_descendant_groups: true
+        });
         return epics.map(e => ({ ...e, type: 'EPIC' }));
     }
 
-    async getProjectMilestones(projectPath: string): Promise<GitLabMilestone[]> {
-        const encodedPath = encodeURIComponent(projectPath);
+    async getGroupIssues(groupPath: string): Promise<GitLabIssue[]> {
+        const encodedPath = encodeURIComponent(groupPath);
+        const issues = await this.fetchPaginated<GitLabIssue>(`/groups/${encodedPath}/issues`, {
+            state: 'opened',
+            include_subgroups: true
+        });
+        return issues.map(i => ({ ...i, type: 'ISSUE' }));
+    }
+
+    async getProjectMilestones(projectPath: string | number): Promise<GitLabMilestone[]> {
+        const encodedPath = typeof projectPath === 'string' ? encodeURIComponent(projectPath) : projectPath;
         return this.fetchPaginated<GitLabMilestone>(`/projects/${encodedPath}/milestones`, { state: 'active' });
     }
 

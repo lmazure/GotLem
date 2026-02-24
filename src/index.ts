@@ -43,15 +43,32 @@ async function main() {
 
         // Analysis of Groups
         if (config.scope.groups) {
+            const projectMilestonesCache = new Map<number, any[]>();
+
             for (const groupPath of config.scope.groups) {
                 console.log(`Analyzing group: ${groupPath}...`);
                 try {
+                    // Epics (recursively)
                     const epics = await client.getGroupEpics(groupPath);
-                    const milestones = await client.getGroupMilestones(groupPath);
+                    const groupMilestones = await client.getGroupMilestones(groupPath);
 
                     for (const epic of epics) {
                         for (const rule of config.rules) {
-                            const res = engine.evaluate(epic, rule, milestones, config.comment_prefix, config.comment_suffix);
+                            const res = engine.evaluate(epic, rule, groupMilestones, config.comment_prefix, config.comment_suffix);
+                            if (res) results.push(res);
+                        }
+                    }
+
+                    // Issues from all projects in group (recursively)
+                    const groupIssues = await client.getGroupIssues(groupPath);
+                    for (const issue of groupIssues) {
+                        if (!projectMilestonesCache.has(issue.project_id)) {
+                            const pMilestones = await client.getProjectMilestones(issue.project_id);
+                            projectMilestonesCache.set(issue.project_id, pMilestones);
+                        }
+                        const milestones = projectMilestonesCache.get(issue.project_id)!;
+                        for (const rule of config.rules) {
+                            const res = engine.evaluate(issue, rule, milestones, config.comment_prefix, config.comment_suffix);
                             if (res) results.push(res);
                         }
                     }
