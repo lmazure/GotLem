@@ -87,17 +87,16 @@ async function main() {
 
         console.log(`Analysis complete. ${results.length} proposed improvements found.`);
 
-        if (results.length > 0) {
-            const html = generateReport(results, config.gitlab_url);
-            saveReport(html, reportPath);
-
-            console.log(`Report generated: ${reportPath}`);
-            const absoluteReportPath = path.resolve(reportPath);
-            console.log(`Opening report: ${absoluteReportPath}`);
-            await open(absoluteReportPath);
-        } else {
+        if (results.length === 0) {
             console.log('No issues found to report.');
         }
+        const html = generateReport(results, config.gitlab_url);
+        saveReport(html, reportPath);
+
+        console.log(`Report generated: ${reportPath}`);
+        const absoluteReportPath = path.resolve(reportPath);
+        console.log(`Opening report: ${absoluteReportPath}`);
+        await open(absoluteReportPath);
 
     } catch (error) {
         if (error instanceof Error) {
