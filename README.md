@@ -25,6 +25,23 @@ npm start -- <configPath> <reportPath>
 - `configPath`: Path to your YAML configuration file.
 - `reportPath`: Path where the HTML report will be generated (e.g., `report.html`).
 
+## Authentication
+
+GotLem handles authentication in two stages:
+
+1. **Analysis Phase (CLI)**: To fetch issues and epics from private projects or groups, you must provide a GitLab Personal Access Token via the `GITLAB_TOKEN` environment variable. You can do this by:
+   - Exporting it in your shell: `export GITLAB_TOKEN=your_token`
+   - Or creating a `.env` file in the project root:
+     ```text
+     GITLAB_TOKEN=your_token_here
+     ```
+   
+   Then run the tool:
+   ```bash
+   npm start -- config.yaml report.html
+   ```
+2. **Posting Phase (Browser)**: When you review the report in your browser, you provide a PAT directly in the UI to authorize posting comments.
+
 ## Configuration (YAML)
 
 The tool is driven by a YAML configuration file:
@@ -62,6 +79,10 @@ rules:
 - `getCurrentMilestone()`: Returns the title of the only open milestone for the project/group.
   - **Error Condition**: If 0 or >1 milestones are open, the helper reports an error.
 
-## Security Note
+## Security & Privacy
 
-The generated HTML report handles the GitLab Personal Access Token (PAT) entirely in your browser. The PAT is never stored, logged, or sent to any server other than the GitLab instance you specify.
+GotLem is designed to be "zero-knowledge" regarding your credentials:
+
+- **CLI Phase (`GITLAB_TOKEN`)**: This token is used only during the analysis to read from your GitLab instance. It is handled in-memory by the script and never logged or stored.
+- **Browser Phase (Local Report)**: The generated HTML report is a static file. When you enter your PAT in the browser, it is held in your browser's local memory and used directly via the `fetch` API to communicate with GitLab.
+- **No Intermediate Servers**: Your tokens are never sent to any third-party server or intermediate proxy.

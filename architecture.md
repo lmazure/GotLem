@@ -45,5 +45,5 @@ GotLem follows a strict "fail-fast" philosophy to ensure predictability and avoi
 ## Technical Stack
 - **Language**: TypeScript
 - **Runtime**: Node.js (Targeting latest LTS)
-- **Dependencies**: `axios`, `handlebars`, `js-yaml`, `open`
+- **Dependencies**: `axios`, `handlebars`, `js-yaml`, `open`, `dotenv`
 - **Testing**: Node.js built-in test runner (`node:test`, `node:assert`)

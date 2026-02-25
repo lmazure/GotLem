@@ -56,4 +56,12 @@ describe('GitLabClient Recursive Fetching', () => {
         assert.strictEqual(milestones.length, 1);
         assert.strictEqual(mockGet.mock.callCount(), 1);
     });
+
+    test('should include PRIVATE-TOKEN header if PAT is provided', () => {
+        const client = new GitLabClient('https://gitlab.example.com', 'secret-pat');
+        const axiosInstance = (client as any).client;
+
+        // Axios stores create-time headers in defaults.headers
+        assert.strictEqual(axiosInstance.defaults.headers['PRIVATE-TOKEN'], 'secret-pat');
+    });
 });

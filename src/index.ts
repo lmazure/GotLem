@@ -4,6 +4,7 @@ import { RuleEngine, EvaluationResult } from './rules.js';
 import open from 'open';
 import path from 'path';
 import { generateReport, saveReport } from './report.js';
+import 'dotenv/config';
 
 async function main() {
     const configPath = process.argv[2];
@@ -15,9 +16,15 @@ async function main() {
     }
 
     try {
+        const token = process.env.GITLAB_TOKEN;
+        if (!token) {
+            console.error('Error: GITLAB_TOKEN environment variable is not defined.');
+            process.exit(1);
+        }
+
         console.log('--- GotLem Analysis Starting ---');
         const config = loadConfig(configPath);
-        const client = new GitLabClient(config.gitlab_url);
+        const client = new GitLabClient(config.gitlab_url, token);
         const engine = new RuleEngine();
         const results: EvaluationResult[] = [];
 
