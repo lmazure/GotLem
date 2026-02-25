@@ -68,7 +68,7 @@ export function generateReport(results: EvaluationResult[], gitlabUrl: string): 
                     <td>${res.rule.name} (v${res.rule.version})</td>
                     <td><div class="comment-text">${res.proposedComment}</div></td>
                     <td>
-                        <button class="btn btn-post" onclick="postComment(${index}, '${item.type}', '${parentId}', '${item.iid}', ${JSON.stringify(res.proposedComment).replace(/'/g, "\\'")})">Post Comment</button>
+                        <button class="btn btn-post" onclick='postComment(${index}, "${item.type}", "${parentId}", "${item.iid}", ${JSON.stringify(res.proposedComment).replace(/'/g, "\\'")})'>Post Comment</button>
                         <div id="status-${index}" class="status"></div>
                     </td>
                 </tr>
