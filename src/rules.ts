@@ -26,6 +26,16 @@ export class RuleEngine {
             return item.labels.includes(label);
         });
 
+        Handlebars.registerHelper('isIssue', function (this: any) {
+            const item = this.item as GitLabIssue | GitLabEpic;
+            return item.type === 'ISSUE';
+        });
+
+        Handlebars.registerHelper('isEpic', function (this: any) {
+            const item = this.item as GitLabIssue | GitLabEpic;
+            return item.type === 'EPIC';
+        });
+
         Handlebars.registerHelper('and', function (...args: any[]) {
             // Last argument is the Handlebars options object
             const options = args.pop();

@@ -68,14 +68,14 @@ rules:
 - `perimeter`: A Handlebars template expression evaluating to `"true"` if the rule applies.
 - `comment`: A Handlebars template for the comment body.
 
-### Template Functions
+### Handlebars Helpers
 
-#### Perimeter Helpers
-- `hasNoMilestone()`: Returns true if the item has no milestone assigned.
+- `hasNoMilestone()`: Returns true if the item has no milestone assigned (Issues only).
 - `hasLabel(label)`: Returns true if the item has the specified label.
-- Supports logical operators `and` and `or`.
-
-#### Comment Helpers
+- `isIssue()`: Returns true if the item is an Issue.
+- `isEpic()`: Returns true if the item is an Epic.
+- `and(...)`: Returns true if all conditions are true.
+- `or(...)`: Returns true if any condition is true.
 - `getCurrentMilestone()`: Returns the title of the only open milestone for the project/group.
   - **Error Condition**: If 0 or >1 milestones are open, the helper reports an error.
 

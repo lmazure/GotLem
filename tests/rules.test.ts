@@ -128,4 +128,70 @@ describe('RuleEngine', () => {
         assert.ok(result);
         assert.strictEqual(result.proposedComment, 'Error: hasNoMilestone helper is only supported for Issues, not Epics.');
     });
+
+    test('should match isIssue helper for issues', () => {
+        const rule: Rule = {
+            name: 'Issue Check',
+            version: 1,
+            perimeter: '{{#if (isIssue)}}true{{/if}}',
+            comment: 'This is an issue'
+        };
+        const result = engine.evaluate(mockIssue, rule, mockMilestones, '', '');
+        assert.ok(result);
+        assert.strictEqual(result.proposedComment, 'This is an issue');
+    });
+
+    test('should NOT match isIssue helper for epics', () => {
+        const mockEpic: GitLabEpic = {
+            id: 2,
+            iid: 201,
+            title: 'Big Epic',
+            description: 'Main epic',
+            labels: [],
+            web_url: 'https://gitlab.com/epic/201',
+            group_id: 1,
+            type: 'EPIC'
+        };
+        const rule: Rule = {
+            name: 'Issue Check',
+            version: 1,
+            perimeter: '{{#if (isIssue)}}true{{/if}}',
+            comment: 'This is an issue'
+        };
+        const result = engine.evaluate(mockEpic, rule, [], '', '');
+        assert.strictEqual(result, null);
+    });
+
+    test('should match isEpic helper for epics', () => {
+        const mockEpic: GitLabEpic = {
+            id: 2,
+            iid: 201,
+            title: 'Big Epic',
+            description: 'Main epic',
+            labels: [],
+            web_url: 'https://gitlab.com/epic/201',
+            group_id: 1,
+            type: 'EPIC'
+        };
+        const rule: Rule = {
+            name: 'Epic Check',
+            version: 1,
+            perimeter: '{{#if (isEpic)}}true{{/if}}',
+            comment: 'This is an epic'
+        };
+        const result = engine.evaluate(mockEpic, rule, [], '', '');
+        assert.ok(result);
+        assert.strictEqual(result.proposedComment, 'This is an epic');
+    });
+
+    test('should NOT match isEpic helper for issues', () => {
+        const rule: Rule = {
+            name: 'Epic Check',
+            version: 1,
+            perimeter: '{{#if (isEpic)}}true{{/if}}',
+            comment: 'This is an epic'
+        };
+        const result = engine.evaluate(mockIssue, rule, mockMilestones, '', '');
+        assert.strictEqual(result, null);
+    });
 });
