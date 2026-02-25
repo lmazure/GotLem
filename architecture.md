@@ -42,6 +42,27 @@ GotLem follows a strict "fail-fast" philosophy to ensure predictability and avoi
 - **Mandatory Coverage**: Every new feature or fix must be covered by automated tests.
 - **Test Suite**: Tests are located in the `tests/` directory and use the built-in Node.js test runner.
 
+## Development Workflow
+
+### Build
+Compile the TypeScript source code into the `dist/` directory:
+```bash
+npm run build
+```
+
+### Test
+Run the automated test suite (requires a successful build):
+```bash
+npm test
+```
+
+### Run
+Execute the tool locally:
+```bash
+# Ensure GITLAB_TOKEN is set in your environment or .env file
+npm start -- <configPath> <reportPath>
+```
+
 ## Technical Stack
 - **Language**: TypeScript
 - **Runtime**: Node.js (Targeting latest LTS)
